@@ -4,7 +4,11 @@ import { useState } from "react";
 import EditModal from "./EditModal";
 import { UpdateUser } from "@/lib/firebase/firestore";
 
-export default function ProfileCard({ currentUser }) {
+type ProfileCardProps = {
+  currentUser: any;
+};
+
+const PostModal: React.FC<ProfileCardProps> = ({ currentUser }) => {
   let user = auth.currentUser;
   const [modalOpen, setModalOpen] = useState(false);
   const [changes, setChanges] = useState({
@@ -44,4 +48,4 @@ export default function ProfileCard({ currentUser }) {
       </div>
     </div>
   );
-}
+};

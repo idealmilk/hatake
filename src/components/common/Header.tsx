@@ -6,6 +6,7 @@ import AvatarMenu from "./AvatarMenu";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { GoBell } from "react-icons/go";
 import { IconContext } from "react-icons";
+import { LuSearch } from "react-icons/lu";
 
 export default function Header() {
   const router = useRouter();
@@ -59,6 +60,22 @@ export default function Header() {
           <div className="flex items-center lg:order-2">
             {user && (
               <>
+                <div className="flex justify-between border border-gray-300 rounded-full py-2 px-4 mr-6">
+                  <div className="flex">
+                    <IconContext.Provider
+                      value={{ color: "black", size: "1.4em" }}
+                    >
+                      <div
+                        onClick={() => router.push("/sign-in")}
+                        className="mr-2"
+                      >
+                        <LuSearch />
+                      </div>
+                    </IconContext.Provider>
+                    <p className="pr-20">Search</p>
+                  </div>
+                  <div className="border-l pl-3">Work</div>
+                </div>
                 <IconContext.Provider value={{ color: "black", size: "1.7em" }}>
                   <div onClick={() => router.push("/sign-in")} className="mr-6">
                     <IoPaperPlaneOutline />
