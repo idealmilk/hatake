@@ -53,7 +53,7 @@ const EditModal: React.FC<EditModalProps> = ({
         placeholder="Display Name"
         value={changes.displayName}
         onChange={(event) =>
-          setChanges((prevState) => ({
+          setChanges((prevState: any) => ({
             ...prevState,
             displayName: event.target.value,
           }))
@@ -66,7 +66,7 @@ const EditModal: React.FC<EditModalProps> = ({
         placeholder="Email"
         value={changes.email}
         onChange={(event) =>
-          setChanges((prevState) => ({
+          setChanges((prevState: any) => ({
             ...prevState,
             email: event.target.value,
           }))
@@ -79,7 +79,7 @@ const EditModal: React.FC<EditModalProps> = ({
         placeholder="Headline"
         value={changes.headline}
         onChange={(event) =>
-          setChanges((prevState) => ({
+          setChanges((prevState: any) => ({
             ...prevState,
             headline: event.target.value,
           }))
@@ -92,7 +92,7 @@ const EditModal: React.FC<EditModalProps> = ({
         placeholder="Location"
         value={changes.location}
         onChange={(event) =>
-          setChanges((prevState) => ({
+          setChanges((prevState: any) => ({
             ...prevState,
             location: event.target.value,
           }))

@@ -1,15 +1,23 @@
-import Posts from "@/components/Posts";
 import ProfileCard from "@/components/common/ProfileCard";
 import Loader from "@/components/common/Loader";
-import PostForm from "@/components/common/PostForm";
-import HomeLayout from "@/layouts/HomeLayout";
 import ProfileLayout from "@/layouts/ProfileLayout";
 import { auth } from "@/lib/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
-export default function Profile() {
+type currentUserProps = {
+  currentUser: {
+    displayName: string;
+    email: string;
+    headline?: string;
+    id: string;
+    location?: string;
+  };
+};
+
+const Profile: React.FC<currentUserProps> = ({ currentUser }) => {
+  console.log(currentUser);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +36,9 @@ export default function Profile() {
     <Loader />
   ) : (
     <ProfileLayout>
-      <ProfileCard />
+      <ProfileCard currentUser={currentUser} />
     </ProfileLayout>
   );
-}
+};
+
+export default Profile;
