@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         transparent: "transparent",
         orange: "#D16400",
+        green: "#004F08",
+        darkGray: "#393939",
+        lightGray: "#AFAFAF",
       },
     },
   },

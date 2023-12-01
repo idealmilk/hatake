@@ -3,13 +3,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import EditModal from "./EditModal";
 import { UpdateUser } from "@/lib/firebase/firestore";
+import { FaLocationDot } from "react-icons/fa6";
+import { IconContext } from "react-icons";
+import Posts from "../Posts";
 
 type ProfileCardProps = {
   currentUser: any;
 };
 
-const PostModal: React.FC<ProfileCardProps> = ({ currentUser }) => {
-  let user = auth.currentUser;
+const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [changes, setChanges] = useState({
     displayName: currentUser.displayName ? currentUser.displayName : "",
@@ -18,34 +20,60 @@ const PostModal: React.FC<ProfileCardProps> = ({ currentUser }) => {
     location: currentUser.location ? currentUser.location : "",
   });
 
-  const router = useRouter();
-
   const updateProfileData = async () => {
     UpdateUser(currentUser.id, changes);
     setModalOpen(false);
   };
 
-  console.log(currentUser);
-
   return (
-    <div className="relative w-auto m-8 p-8 border-slate-300 border">
-      {currentUser.displayName && <h3>{currentUser.displayName}</h3>}
-      {currentUser.headline && <p>{currentUser.headline}</p>}
-      {currentUser.location && <p>{currentUser.location}</p>}
+    <div className="relative w-auto mx-32 my-8  border-slate-300 border rounded-3xl">
+      <div className="w-full h-48 bg-orange rounded-t-2xl" />
 
-      <div className="absolute top-8 right-8">
-        <button className="bg-orange p-2" onClick={() => setModalOpen(true)}>
-          Edit
-        </button>
-        <EditModal
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-          changes={changes}
-          setChanges={setChanges}
-          updateProfileData={updateProfileData}
-          currentUser={currentUser}
-        />
+      {/* Top details section */}
+      <div className="-translate-y-24 ml-6">
+        <div className="w-48 h-48 bg-green border-2 border-white rounded-full" />
+
+        <div className="flex justify-between p-6">
+          <div className="">
+            {currentUser.displayName && (
+              <h3 className="text-2xl font-semibold">
+                {currentUser.displayName}
+              </h3>
+            )}
+
+            {currentUser.location && (
+              <div className="flex text-darkGray">
+                <IconContext.Provider value={{ size: "1.2em" }}>
+                  <div className="mr-2 translate-y-1">
+                    <FaLocationDot />
+                  </div>
+                </IconContext.Provider>
+                <p className="text-md">{currentUser.location}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="">
+            <button
+              className="text-orange font-semibold border-2 border-orange py-1 px-4 rounded-full"
+              onClick={() => setModalOpen(true)}
+            >
+              Edit Profile
+            </button>
+            <EditModal
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              changes={changes}
+              setChanges={setChanges}
+              updateProfileData={updateProfileData}
+              currentUser={currentUser}
+            />
+          </div>
+        </div>
       </div>
+      <Posts />
     </div>
   );
 };
+
+export default ProfileCard;
