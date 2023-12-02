@@ -47,7 +47,7 @@ export const SignUpAPI = async (credentials: Credentials) => {
     const user = createdUser.user;
 
     const data = {
-      id: user.uid,
+      authId: user.uid,
       email: credentials.email,
       displayName: credentials.displayName,
     };
@@ -76,7 +76,7 @@ export const GoogleSignInAPI = async () => {
 
     if (querySnapshot.empty) {
       const data = {
-        id: user.uid,
+        authId: user.uid,
         email: user.email,
         displayName: user.displayName,
       };

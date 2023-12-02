@@ -15,7 +15,9 @@ export default function RegisterComponent() {
 
   const signUp = async () => {
     try {
+      console.log("signingup");
       let res = await SignUpAPI(credentials);
+      console.log(res);
       toast.success("Account created");
       router.push("/");
     } catch (err) {
@@ -51,7 +53,7 @@ export default function RegisterComponent() {
         <p className="text-sm leading-normal">
           Make the most of your professional life
         </p>
-        <form className="space-y-5 mt-5">
+        <div className="space-y-5 mt-5">
           <div className="mb-4 relative">
             <input
               className="w-full rounded px-3 border border-gray-500 pt-5 pb-2 focus:outline-none input active:outline-none"
@@ -109,7 +111,7 @@ export default function RegisterComponent() {
           >
             Agree & Join
           </button>
-        </form>
+        </div>
 
         <div className="relative flex py-5 items-center">
           <div className="flex-grow border-t border-gray-400"></div>

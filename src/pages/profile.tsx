@@ -1,25 +1,21 @@
-import ProfileCard from "@/components/common/ProfileCard";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+
 import Loader from "@/components/common/Loader";
 import ProfileLayout from "@/layouts/ProfileLayout";
+import ProfileCard from "@/components/common/ProfileCard";
 import { auth } from "@/lib/firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { GetCurrentUser } from "@/lib/firebase/firestore";
 
-type currentUserProps = {
-  currentUser: {
-    displayName: string;
-    email: string;
-    headline?: string;
-    id: string;
-    location?: string;
-  };
-};
-
-const Profile: React.FC<currentUserProps> = ({ currentUser }) => {
-  console.log(currentUser);
+const Profile = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    GetCurrentUser(setCurrentUser);
+  }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {

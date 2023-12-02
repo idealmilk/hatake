@@ -10,6 +10,7 @@ import {
 import { auth, firestore } from "./config";
 import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";
+import { UserType } from "@/types/user";
 
 let postsRef = collection(firestore, "posts");
 let usersRef = collection(firestore, "users");
@@ -54,16 +55,31 @@ export const UpdateUser = (userId: any, payload: any) => {
 };
 
 export const GetCurrentUser = (setCurrentUser: Function) => {
-  let currentUserEmail = auth.currentUser?.email;
+  let currentUserAuthId = auth.currentUser?.uid;
 
   onSnapshot(usersRef, (res) => {
     setCurrentUser(
       res.docs
         .map((docs) => {
-          return { ...docs.data(), id: docs.id };
+          return { ...docs.data(), id: docs.id } as UserType;
         })
         .filter((item) => {
-          return item.email === currentUserEmail;
+          return item.authId === currentUserAuthId;
+        })[0]
+    );
+  });
+};
+
+export const GetSingleUser = (setSingleUser: Function, userId: string) => {
+  console.log("userID:", userId);
+  onSnapshot(usersRef, (res) => {
+    setSingleUser(
+      res.docs
+        .map((docs) => {
+          return { ...docs.data(), id: docs.id } as UserType;
+        })
+        .filter((item) => {
+          return item.id === userId;
         })[0]
     );
   });

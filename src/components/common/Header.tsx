@@ -1,27 +1,16 @@
-import { SignOutAPI } from "@/lib/firebase/auth";
-import { auth } from "@/lib/firebase/config";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import AvatarMenu from "./AvatarMenu";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { GoBell } from "react-icons/go";
 import { IconContext } from "react-icons";
 import { LuSearch } from "react-icons/lu";
 
+import { auth } from "@/lib/firebase/config";
+
+import AvatarMenu from "./AvatarMenu";
+
 export default function Header() {
   const router = useRouter();
   let user = auth.currentUser;
-
-  const signOut = async () => {
-    try {
-      let res = await SignOutAPI();
-      toast.success("Successfully signed out");
-      router.push("/");
-    } catch (err: any) {
-      console.log(err);
-      toast.error("Could not sign out");
-    }
-  };
 
   return (
     <header>

@@ -1,4 +1,15 @@
-export default function PostCard(post: any) {
+import { GetSingleUser } from "@/lib/firebase/firestore";
+import { PostType } from "@/types/post";
+import { UserType } from "@/types/user";
+import { useMemo, useState } from "react";
+
+export default function PostCard(post: PostType) {
+  const [singleUser, setSingleUser] = useState<UserType | null>(null);
+
+  useMemo(() => {
+    GetSingleUser(setSingleUser, post.userId);
+  }, []);
+
   return (
     <div className="bg-white border shadow-sm px-4 py-3 rounded-lg max-w-lg">
       <div className="flex items-center">
@@ -8,7 +19,7 @@ export default function PostCard(post: any) {
         />
         <div className="ml-2">
           <div className="text-sm ">
-            <span className="font-semibold">{post.userDisplayName}</span>
+            <span className="font-semibold">{singleUser?.displayName}</span>
             <span className="text-gray-500"> • 1st</span>
           </div>
           <div className="text-gray-500 text-xs ">

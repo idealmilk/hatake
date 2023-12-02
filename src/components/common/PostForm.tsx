@@ -1,12 +1,16 @@
 import { useState } from "react";
 import PostModal from "./PostModal";
 import { CreatePost } from "@/lib/firebase/firestore";
-import { DocumentData, WithFieldValue } from "firebase/firestore";
 import { getCurrentTimeStamp } from "@/helpers/useMoment";
 import { auth } from "@/lib/firebase/config";
 import { getUniqueID } from "@/helpers/getUniqueId";
+import { UserType } from "@/types/user";
 
-export default function PostForm() {
+type PostFormProps = {
+  currentUser: UserType | null;
+};
+
+const PostForm: React.FC<PostFormProps> = ({ currentUser }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [body, setBody] = useState("");
 
@@ -14,11 +18,9 @@ export default function PostForm() {
 
   const sendPost = async () => {
     let data = {
-      id: getUniqueID(),
       body: body,
       timeStamp: getCurrentTimeStamp("LLL"),
-      userId: user?.uid,
-      userDisplayName: user?.displayName,
+      userId: currentUser?.id,
     };
 
     await CreatePost(data);
@@ -106,4 +108,6 @@ export default function PostForm() {
       </div>
     </div>
   );
-}
+};
+
+export default PostForm;

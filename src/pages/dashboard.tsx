@@ -6,8 +6,13 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import PostForm from "@/components/common/PostForm";
 import Posts from "@/components/Posts";
+import { UserType } from "@/types/user";
 
-export default function Dashboard() {
+type DashboardProps = {
+  currentUser: UserType;
+};
+
+const Dashboard: React.FC<DashboardProps> = ({ currentUser }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -25,9 +30,11 @@ export default function Dashboard() {
   return loading ? (
     <Loader />
   ) : (
-    <HomeLayout>
-      <PostForm />
+    <>
+      <PostForm currentUser={currentUser} />
       <Posts />
-    </HomeLayout>
+    </>
   );
-}
+};
+
+export default Dashboard;
