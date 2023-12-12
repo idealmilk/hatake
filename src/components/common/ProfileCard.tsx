@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditModal from "./EditModal";
 import { GetCurrentUser, UpdateUser } from "@/lib/firebase/firestore";
 import { FaLocationDot } from "react-icons/fa6";
@@ -11,11 +11,22 @@ const ProfileCard = () => {
   const { currentUser, setCurrentUser } = useCurrentUser();
 
   const [changes, setChanges] = useState({
-    displayName: currentUser?.displayName ? currentUser?.displayName : "",
-    email: currentUser?.email ? currentUser?.email : "",
-    headline: currentUser?.headline ? currentUser?.headline : "",
-    location: currentUser?.location ? currentUser?.location : "",
+    displayName: "",
+    email: "",
+    headline: "",
+    location: "",
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setChanges({
+        displayName: currentUser.displayName || "",
+        email: currentUser.email || "",
+        headline: currentUser.headline || "",
+        location: currentUser.location || "",
+      });
+    }
+  }, [currentUser]);
 
   const updateProfileData = async () => {
     UpdateUser(currentUser?.id, changes);
