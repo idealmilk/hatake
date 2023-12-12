@@ -4,6 +4,7 @@ import {
   doc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -28,12 +29,15 @@ export const CreatePost = (data: any) => {
 };
 
 export const GetPosts = (setAllPosts: Function) => {
-  onSnapshot(postsRef, (res) => {
-    setAllPosts(
-      res.docs.map((docs) => {
-        return { ...docs.data(), id: docs.id };
-      })
-    );
+  const postsQuery = query(postsRef, orderBy("timeStamp", "desc")); // 'desc' for newest first, 'asc' for oldest first
+
+  onSnapshot(postsQuery, (snapshot) => {
+    const posts = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    setAllPosts(posts);
   });
 };
 

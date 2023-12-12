@@ -1,3 +1,4 @@
+import { formatTimeStamp } from "@/helpers/useMoment";
 import { GetSingleUser } from "@/lib/firebase/firestore";
 import { PostType } from "@/types/post";
 import { UserType } from "@/types/user";
@@ -9,6 +10,10 @@ export default function PostCard(post: PostType) {
   useMemo(() => {
     GetSingleUser(setSingleUser, post.userId);
   }, []);
+
+  if (!singleUser) {
+    return <p>Loading</p>;
+  }
 
   return (
     <div className="bg-white border shadow-sm px-4 py-3 rounded-lg max-w-lg">
@@ -26,7 +31,9 @@ export default function PostCard(post: PostType) {
             Software Engineer at Tesla, Inc
           </div>
           <div className="text-gray-500 text-xs flex">
-            <span className="inline-block">{post.timeStamp} • </span>
+            <span className="inline-block">
+              {formatTimeStamp(post.timeStamp)} •{" "}
+            </span>
             <svg
               className="inline-block ml-1 fill-current"
               xmlns="http://www.w3.org/2000/svg"

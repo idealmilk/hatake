@@ -14,7 +14,7 @@ const PostForm = () => {
   const sendPost = async (userId: string) => {
     let data = {
       body: body,
-      timeStamp: getCurrentTimeStamp("LLL"),
+      timeStamp: getCurrentTimeStamp(),
       userId: userId,
     };
 
