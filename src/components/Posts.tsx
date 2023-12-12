@@ -1,17 +1,10 @@
-import { auth } from "@/lib/firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect, useMemo, useState } from "react";
-import { GetPosts } from "@/lib/firebase/firestore";
+import { useMemo, useState } from "react";
+
 import PostCard from "@/components/common/PostCard";
+import { GetPosts } from "@/lib/firebase/firestore";
 
-export default function Posts() {
+const Posts = () => {
   const [allPosts, setAllPosts] = useState<any[]>([]);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      const idToken = await user?.getIdToken();
-    });
-  }, []);
 
   useMemo(() => {
     GetPosts(setAllPosts);
@@ -24,4 +17,6 @@ export default function Posts() {
       })}
     </div>
   );
-}
+};
+
+export default Posts;

@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
   onSnapshot,
   query,
   updateDoc,
@@ -15,10 +16,9 @@ import { UserType } from "@/types/user";
 let postsRef = collection(firestore, "posts");
 let usersRef = collection(firestore, "users");
 
-let user = auth.currentUser;
-
 export const CreatePost = (data: any) => {
-  addDoc(postsRef, data).then((res) => {
+  console.log("data: ", data);
+  addDoc(postsRef, data).then(() => {
     try {
       toast.success("Post has been added successfully");
     } catch (err) {
@@ -37,25 +37,25 @@ export const GetPosts = (setAllPosts: Function) => {
   });
 };
 
-export const UpdateUser = (userId: any, payload: any) => {
+export const UpdateUser = async (userId: string, payload: any) => {
   try {
-    let userToEdit = doc(usersRef, userId);
-    console.log(userToEdit);
+    const userToEdit = doc(usersRef, userId);
 
     if (userToEdit) {
-      console.log("tyring edit");
-      updateDoc(userToEdit, payload);
+      await updateDoc(userToEdit, payload);
     } else {
-      console.log("tyring add");
-      addDoc(usersRef, payload);
+      await addDoc(usersRef, payload);
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw err;
   }
 };
 
 export const GetCurrentUser = (setCurrentUser: Function) => {
   let currentUserAuthId = auth.currentUser?.uid;
+
+  console.log(auth.currentUser);
 
   onSnapshot(usersRef, (res) => {
     setCurrentUser(
@@ -70,8 +70,25 @@ export const GetCurrentUser = (setCurrentUser: Function) => {
   });
 };
 
+// export const FetchCurrentUser = async () => {
+//   const currentUserAuthId = auth.currentUser?.uid;
+
+//   if (currentUserAuthId) {
+//     const q = query(usersRef, where("authId", "==", currentUserAuthId));
+
+//     const querySnapshot = await getDocs(q);
+
+//     if (querySnapshot.empty) {
+//       console.log("No matching documents.");
+//       return null;
+//     }
+
+//     const userDoc = querySnapshot.docs[0];
+//     return userDoc.data();
+//   }
+// };
+
 export const GetSingleUser = (setSingleUser: Function, userId: string) => {
-  console.log("userID:", userId);
   onSnapshot(usersRef, (res) => {
     setSingleUser(
       res.docs

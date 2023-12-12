@@ -7,15 +7,11 @@ import ProfileLayout from "@/layouts/ProfileLayout";
 import ProfileCard from "@/components/common/ProfileCard";
 import { auth } from "@/lib/firebase/config";
 import { GetCurrentUser } from "@/lib/firebase/firestore";
+import Posts from "@/components/Posts";
 
 const Profile = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState({});
-
-  useEffect(() => {
-    GetCurrentUser(setCurrentUser);
-  }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -32,7 +28,9 @@ const Profile = () => {
     <Loader />
   ) : (
     <ProfileLayout>
-      <ProfileCard currentUser={currentUser} />
+      <ProfileCard />
+
+      <Posts />
     </ProfileLayout>
   );
 };

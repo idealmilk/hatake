@@ -5,20 +5,11 @@ import Loader from "@/components/common/Loader";
 import { auth } from "@/lib/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
-import { useState, useEffect, useMemo } from "react";
-import { UserType } from "@/types/user";
-import { GetCurrentUser } from "@/lib/firebase/firestore";
+import { useState, useEffect } from "react";
 
 const Home = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-
-  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
-  useMemo(() => {
-    GetCurrentUser(setCurrentUser);
-  }, []);
-
-  console.log(currentUser);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -31,11 +22,12 @@ const Home = () => {
       }
     });
   }, []);
+
   return loading ? (
     <Loader />
   ) : (
     <HomeLayout>
-      <PostForm currentUser={currentUser} />
+      <PostForm />
       <Posts />
     </HomeLayout>
   );

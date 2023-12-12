@@ -1,6 +1,8 @@
 import React, { MouseEventHandler, useState } from "react";
 import { Button, Modal } from "antd";
 import { auth } from "@/lib/firebase/config";
+import { useCurrentUser } from "@/context/UserContext";
+import { UserType } from "@/types/user";
 
 type EditModalProps = {
   modalOpen: boolean;
@@ -8,7 +10,7 @@ type EditModalProps = {
   changes: any;
   setChanges: Function;
   updateProfileData: MouseEventHandler;
-  currentUser: any;
+  currentUser: UserType | null;
 };
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -17,9 +19,8 @@ const EditModal: React.FC<EditModalProps> = ({
   changes,
   setChanges,
   updateProfileData,
-  currentUser,
 }) => {
-  let user = auth.currentUser;
+  const { currentUser } = useCurrentUser();
 
   return (
     <Modal
@@ -30,10 +31,10 @@ const EditModal: React.FC<EditModalProps> = ({
       onCancel={() => {
         setModalOpen(false);
         setChanges({
-          displayName: currentUser.displayName ? currentUser.displayName : "",
-          email: currentUser.email ? currentUser.email : "",
-          headline: currentUser.headline ? currentUser.headline : "",
-          location: currentUser.location ? currentUser.location : "",
+          displayName: currentUser?.displayName ? currentUser?.displayName : "",
+          email: currentUser?.email ? currentUser?.email : "",
+          headline: currentUser?.headline ? currentUser?.headline : "",
+          location: currentUser?.location ? currentUser?.location : "",
         });
       }}
       footer={[

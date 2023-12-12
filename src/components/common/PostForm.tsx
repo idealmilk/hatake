@@ -1,26 +1,21 @@
 import { useState } from "react";
 import PostModal from "./PostModal";
 import { CreatePost } from "@/lib/firebase/firestore";
+
 import { getCurrentTimeStamp } from "@/helpers/useMoment";
-import { auth } from "@/lib/firebase/config";
-import { getUniqueID } from "@/helpers/getUniqueId";
-import { UserType } from "@/types/user";
+import { useCurrentUser } from "@/context/UserContext";
 
-type PostFormProps = {
-  currentUser: UserType | null;
-};
-
-const PostForm: React.FC<PostFormProps> = ({ currentUser }) => {
+const PostForm = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [body, setBody] = useState("");
 
-  let user = auth.currentUser;
+  const { currentUser } = useCurrentUser();
 
-  const sendPost = async () => {
+  const sendPost = async (userId: string) => {
     let data = {
       body: body,
       timeStamp: getCurrentTimeStamp("LLL"),
-      userId: currentUser?.id,
+      userId: userId,
     };
 
     await CreatePost(data);
@@ -41,7 +36,7 @@ const PostForm: React.FC<PostFormProps> = ({ currentUser }) => {
         setModalOpen={setModalOpen}
         body={body}
         setBody={setBody}
-        sendPost={sendPost}
+        sendPost={() => sendPost(currentUser?.id)}
       />
 
       <div className="icons flex text-gray-500 m-2">

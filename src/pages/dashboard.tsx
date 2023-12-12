@@ -7,34 +7,11 @@ import { useState, useEffect } from "react";
 import PostForm from "@/components/common/PostForm";
 import Posts from "@/components/Posts";
 import { UserType } from "@/types/user";
+import { useQuery } from "@tanstack/react-query";
+import { FetchCurrentUser } from "@/lib/firebase/firestore";
 
-type DashboardProps = {
-  currentUser: UserType;
-};
-
-const Dashboard: React.FC<DashboardProps> = ({ currentUser }) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      const idToken = await user?.getIdToken();
-      if (!idToken) {
-        router.push("/");
-        setLoading(false);
-      } else {
-        setLoading(false);
-      }
-    });
-  }, []);
-  return loading ? (
-    <Loader />
-  ) : (
-    <>
-      <PostForm currentUser={currentUser} />
-      <Posts />
-    </>
-  );
+const Dashboard = () => {
+  return <div>{data?.email}</div>;
 };
 
 export default Dashboard;

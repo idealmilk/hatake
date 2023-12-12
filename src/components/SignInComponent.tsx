@@ -3,6 +3,7 @@ import { SignInAPI, GoogleSignInAPI } from "@/lib/firebase/auth";
 import { useState } from "react";
 import GoogleButton from "react-google-button";
 import { toast } from "react-toastify";
+import { GetCurrentUser } from "@/lib/firebase/firestore";
 
 export default function SignInComponent() {
   const router = useRouter();

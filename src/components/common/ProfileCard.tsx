@@ -1,27 +1,25 @@
-import { auth } from "@/lib/firebase/config";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import EditModal from "./EditModal";
-import { UpdateUser } from "@/lib/firebase/firestore";
+import { GetCurrentUser, UpdateUser } from "@/lib/firebase/firestore";
 import { FaLocationDot } from "react-icons/fa6";
 import { IconContext } from "react-icons";
-import Posts from "../Posts";
+import { useCurrentUser } from "@/context/UserContext";
 
-type ProfileCardProps = {
-  currentUser: any;
-};
-
-const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
+const ProfileCard = () => {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { currentUser, setCurrentUser } = useCurrentUser();
+
   const [changes, setChanges] = useState({
-    displayName: currentUser.displayName ? currentUser.displayName : "",
-    email: currentUser.email ? currentUser.email : "",
-    headline: currentUser.headline ? currentUser.headline : "",
-    location: currentUser.location ? currentUser.location : "",
+    displayName: currentUser?.displayName ? currentUser?.displayName : "",
+    email: currentUser?.email ? currentUser?.email : "",
+    headline: currentUser?.headline ? currentUser?.headline : "",
+    location: currentUser?.location ? currentUser?.location : "",
   });
 
   const updateProfileData = async () => {
-    UpdateUser(currentUser.id, changes);
+    UpdateUser(currentUser?.id, changes);
+    GetCurrentUser(setCurrentUser);
     setModalOpen(false);
   };
 
@@ -35,20 +33,20 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
 
         <div className="flex justify-between p-6">
           <div className="">
-            {currentUser.displayName && (
+            {currentUser?.displayName && (
               <h3 className="text-2xl font-semibold">
-                {currentUser.displayName}
+                {currentUser?.displayName}
               </h3>
             )}
 
-            {currentUser.location && (
+            {currentUser?.location && (
               <div className="flex text-darkGray">
                 <IconContext.Provider value={{ size: "1.2em" }}>
                   <div className="mr-2 translate-y-1">
                     <FaLocationDot />
                   </div>
                 </IconContext.Provider>
-                <p className="text-md">{currentUser.location}</p>
+                <p className="text-md">{currentUser?.location}</p>
               </div>
             )}
           </div>
@@ -71,7 +69,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
           </div>
         </div>
       </div>
-      <Posts />
     </div>
   );
 };
