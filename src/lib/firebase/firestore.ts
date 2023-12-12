@@ -28,8 +28,21 @@ export const CreatePost = (data: any) => {
   });
 };
 
-export const GetPosts = (setAllPosts: Function) => {
-  const postsQuery = query(postsRef, orderBy("timeStamp", "desc")); // 'desc' for newest first, 'asc' for oldest first
+export const GetPosts = (
+  setAllPosts: Function,
+  userId?: string | undefined
+) => {
+  let postsQuery;
+
+  if (userId) {
+    postsQuery = query(
+      postsRef,
+      where("userId", "==", userId),
+      orderBy("timeStamp", "desc")
+    );
+  } else {
+    postsQuery = query(postsRef, orderBy("timeStamp", "desc"));
+  }
 
   onSnapshot(postsQuery, (snapshot) => {
     const posts = snapshot.docs.map((doc) => ({
@@ -41,7 +54,7 @@ export const GetPosts = (setAllPosts: Function) => {
   });
 };
 
-export const UpdateUser = async (userId: string, payload: any) => {
+export const UpdateUser = async (userId: string | undefined, payload: any) => {
   try {
     const userToEdit = doc(usersRef, userId);
 
@@ -92,7 +105,10 @@ export const GetCurrentUser = (setCurrentUser: Function) => {
 //   }
 // };
 
-export const GetSingleUser = (setSingleUser: Function, userId: string) => {
+export const GetSingleUser = (
+  setSingleUser: Function,
+  userId: string | undefined
+) => {
   onSnapshot(usersRef, (res) => {
     setSingleUser(
       res.docs

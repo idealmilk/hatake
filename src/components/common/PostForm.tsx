@@ -11,7 +11,7 @@ const PostForm = () => {
 
   const { currentUser } = useCurrentUser();
 
-  const sendPost = async (userId: string) => {
+  const sendPost = async (userId: string | undefined) => {
     let data = {
       body: body,
       timeStamp: getCurrentTimeStamp(),

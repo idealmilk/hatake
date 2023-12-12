@@ -8,10 +8,14 @@ import ProfileCard from "@/components/common/ProfileCard";
 import { auth } from "@/lib/firebase/config";
 import { GetCurrentUser } from "@/lib/firebase/firestore";
 import Posts from "@/components/Posts";
+import { useCurrentUser } from "@/context/UserContext";
 
 const Profile = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const { currentUser, setCurrentUser } = useCurrentUser();
+
+  console.log("userIdProfile: ", currentUser?.id);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -30,7 +34,7 @@ const Profile = () => {
     <ProfileLayout>
       <ProfileCard />
 
-      <Posts />
+      <Posts userId={currentUser?.id} />
     </ProfileLayout>
   );
 };
