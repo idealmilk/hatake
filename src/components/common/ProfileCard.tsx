@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import EditModal from "./EditModal";
 import { GetCurrentUser, UpdateUser } from "@/lib/firebase/firestore";
 import { FaLocationDot } from "react-icons/fa6";
 import { IconContext } from "react-icons";
 import { useCurrentUser } from "@/context/UserContext";
+import { UploadImage } from "@/lib/firebase/storage";
 
 const ProfileCard = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState({});
 
   const { currentUser, setCurrentUser } = useCurrentUser();
 
@@ -34,13 +36,35 @@ const ProfileCard = () => {
     setModalOpen(false);
   };
 
+  const getImage = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setCurrentImage(event.target.files[0]);
+    }
+  };
+
+  const uploadDisplayPic = () => {
+    UploadImage(currentImage, currentUser?.id);
+  };
+
   return (
     <div className="relative w-auto mx-32 my-8  border-slate-300 border rounded-3xl">
       <div className="w-full h-48 bg-orange rounded-t-2xl" />
 
       {/* Top details section */}
       <div className="-translate-y-24 ml-6">
-        <div className="w-48 h-48 bg-green border-2 border-white rounded-full" />
+        <div
+          className={`w-48 h-48 border-2 border-white rounded-full ${
+            currentUser?.displayPicURL ? "bg-cover bg-center" : "bg-green"
+          }`}
+          style={{
+            backgroundImage: currentUser?.displayPicURL
+              ? `url(${currentUser.displayPicURL})`
+              : "none",
+          }}
+        >
+          <input type="file" onChange={getImage} />
+          <button onClick={uploadDisplayPic}>Upload</button>
+        </div>
 
         <div className="flex justify-between p-6">
           <div className="">

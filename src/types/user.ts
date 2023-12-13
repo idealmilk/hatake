@@ -5,4 +5,5 @@ export type UserType = {
   email: string;
   headline?: string;
   location?: string;
+  displayPicURL?: string;
 };
