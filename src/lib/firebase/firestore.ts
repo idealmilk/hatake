@@ -1,21 +1,23 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { auth, firestore } from "./config";
 import { toast } from "react-toastify";
-import { updateProfile } from "firebase/auth";
 import { UserType } from "@/types/user";
 
 let postsRef = collection(firestore, "posts");
 let usersRef = collection(firestore, "users");
+let likesRef = collection(firestore, "likes");
 
 export const CreatePost = (data: any) => {
   console.log("data: ", data);
@@ -120,4 +122,37 @@ export const GetSingleUser = (
         })[0]
     );
   });
+};
+
+export const LikePost = (userId: string, postId: string, isLiked: boolean) => {
+  try {
+    let docToLike = doc(likesRef, `${userId}_${postId}`);
+    if (isLiked) {
+      deleteDoc(docToLike);
+    } else {
+      setDoc(docToLike, { userId, postId });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const GetLikesByUser = (
+  userId: string,
+  postId: string,
+  setLikesCount: Function,
+  setIsLiked: Function
+) => {
+  try {
+    const likeQuery = query(likesRef, where("postId", "==", postId));
+
+    onSnapshot(likeQuery, (res) => {
+      const likes = res.docs.map((doc) => doc.data());
+      const likesCount = likes.length;
+      setLikesCount(likesCount);
+
+      const isLiked = likes.some((like) => like.userId === userId);
+      setIsLiked(isLiked);
+    });
+  } catch (err) {}
 };

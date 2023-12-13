@@ -3,6 +3,8 @@ import { GetSingleUser } from "@/lib/firebase/firestore";
 import { PostType } from "@/types/post";
 import { UserType } from "@/types/user";
 import { useMemo, useState } from "react";
+import LikeButton from "./LikeButton";
+import { useCurrentUser } from "@/context/UserContext";
 
 export default function PostCard(post: PostType) {
   const [singleUser, setSingleUser] = useState<UserType | null>(null);
@@ -10,6 +12,8 @@ export default function PostCard(post: PostType) {
   useMemo(() => {
     GetSingleUser(setSingleUser, post.userId);
   }, []);
+
+  const { currentUser } = useCurrentUser();
 
   if (!singleUser) {
     return <p>Loading</p>;
@@ -67,6 +71,7 @@ export default function PostCard(post: PostType) {
         />
         <span className="ml-1">47 • 26 comments</span>
       </div>
+      {currentUser && <LikeButton userId={currentUser.id} postId={post.id} />}
     </div>
   );
 }
