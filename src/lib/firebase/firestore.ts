@@ -124,7 +124,11 @@ export const GetSingleUser = (
   });
 };
 
-export const LikePost = (userId: string, postId: string, isLiked: boolean) => {
+export const LikePost = (
+  userId: string | undefined,
+  postId: string,
+  isLiked: boolean
+) => {
   try {
     let docToLike = doc(likesRef, `${userId}_${postId}`);
     if (isLiked) {
@@ -138,7 +142,7 @@ export const LikePost = (userId: string, postId: string, isLiked: boolean) => {
 };
 
 export const GetLikesByUser = (
-  userId: string,
+  userId: string | undefined,
   postId: string,
   setLikesCount: Function,
   setIsLiked: Function

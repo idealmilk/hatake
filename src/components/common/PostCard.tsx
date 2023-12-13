@@ -71,7 +71,7 @@ export default function PostCard(post: PostType) {
         />
         <span className="ml-1">47 • 26 comments</span>
       </div>
-      {currentUser && <LikeButton userId={currentUser.id} postId={post.id} />}
+      <LikeButton userId={currentUser?.id} postId={post.id} />
     </div>
   );
 }
