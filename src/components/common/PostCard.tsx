@@ -3,7 +3,7 @@ import { GetSingleUser } from "@/lib/firebase/firestore";
 import { PostType } from "@/types/post";
 import { UserType } from "@/types/user";
 import { useMemo, useState } from "react";
-import LikeButton from "./LikeButton";
+import PostLike from "./PostLike";
 import { useCurrentUser } from "@/context/UserContext";
 
 export default function PostCard(post: PostType) {
@@ -71,7 +71,7 @@ export default function PostCard(post: PostType) {
         />
         <span className="ml-1">47 • 26 comments</span>
       </div>
-      <LikeButton userId={currentUser?.id} postId={post.id} />
+      <PostLike userId={currentUser?.id} postId={post.id} />
     </div>
   );
 }

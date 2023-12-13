@@ -3,12 +3,12 @@ import { GetLikesByUser, LikePost } from "@/lib/firebase/firestore";
 import { useMemo, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 
-type LikeButtonProps = {
+type PostLikeProps = {
   userId: string | undefined;
   postId: string;
 };
 
-const LikeButton: React.FC<LikeButtonProps> = ({ userId, postId }) => {
+const PostLike: React.FC<PostLikeProps> = ({ userId, postId }) => {
   const [likesCount, setLikesCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
@@ -42,4 +42,4 @@ const LikeButton: React.FC<LikeButtonProps> = ({ userId, postId }) => {
   );
 };
 
-export default LikeButton;
+export default PostLike;
