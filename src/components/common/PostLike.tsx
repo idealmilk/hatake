@@ -33,11 +33,17 @@ const PostLike: React.FC<PostLikeProps> = ({ userId, postId }) => {
           onClick={handleLike}
         >
           <AiOutlineLike size={20} />
-          <p>Like</p>
+          <p>{isLiked ? "Unlike" : "Like"}</p>
         </div>
       )}
-      <p>Likes Count: {likesCount}</p>
-      <p>{isLiked ? "Current User Liked" : "Current User Not Liked"}</p>
+      <div className="text-gray-500 text-xs flex items-center mt-3">
+        <img
+          className="mr-0.5"
+          src="https://static-exp1.licdn.com/sc/h/d310t2g24pvdy4pt1jkedo4yb"
+        />
+
+        <span className="ml-1">{likesCount} • 26 comments</span>
+      </div>
     </div>
   );
 };

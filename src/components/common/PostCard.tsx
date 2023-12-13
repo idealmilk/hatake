@@ -56,21 +56,7 @@ export default function PostCard(post: PostType) {
       <p className="text-gray-800 text-sm mt-2 leading-normal md:leading-relaxed">
         {post.body}
       </p>
-      <div className="text-gray-500 text-xs flex items-center mt-3">
-        <img
-          className="mr-0.5"
-          src="https://static-exp1.licdn.com/sc/h/d310t2g24pvdy4pt1jkedo4yb"
-        />
-        <img
-          className="mr-0.5"
-          src="https://static-exp1.licdn.com/sc/h/5thsbmikm6a8uov24ygwd914f"
-        />
-        <img
-          className="mr-0.5"
-          src="https://static-exp1.licdn.com/sc/h/7fx9nkd7mx8avdpqm5hqcbi97"
-        />
-        <span className="ml-1">47 • 26 comments</span>
-      </div>
+
       <PostLike userId={currentUser?.id} postId={post.id} />
     </div>
   );
