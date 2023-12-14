@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -20,7 +21,6 @@ let usersRef = collection(firestore, "users");
 let likesRef = collection(firestore, "likes");
 
 export const CreatePost = (data: any) => {
-  console.log("data: ", data);
   addDoc(postsRef, data).then(() => {
     try {
       toast.success("Post has been added successfully");
@@ -59,7 +59,6 @@ export const GetPosts = (
 export const UpdateUser = async (userId: string | undefined, payload: any) => {
   try {
     const userToEdit = doc(usersRef, userId);
-
     if (userToEdit) {
       await updateDoc(userToEdit, payload);
     } else {
@@ -71,57 +70,47 @@ export const UpdateUser = async (userId: string | undefined, payload: any) => {
   }
 };
 
-export const GetCurrentUser = (setCurrentUser: Function) => {
-  let currentUserAuthId = auth.currentUser?.uid;
-
-  console.log(auth.currentUser);
-
+export const GetAllUsers = (setAllUsers: Function) => {
   onSnapshot(usersRef, (res) => {
-    setCurrentUser(
-      res.docs
-        .map((docs) => {
-          return { ...docs.data(), id: docs.id } as UserType;
-        })
-        .filter((item) => {
-          return item.authId === currentUserAuthId;
-        })[0]
+    setAllUsers(
+      res.docs.map((docs) => {
+        return { ...docs.data(), id: docs.id } as UserType;
+      })
     );
   });
 };
 
-// export const FetchCurrentUser = async () => {
-//   const currentUserAuthId = auth.currentUser?.uid;
+export const GetCurrentUser = (setCurrentUser: Function) => {
+  let currentUserAuthId = auth.currentUser?.uid;
 
-//   if (currentUserAuthId) {
-//     const q = query(usersRef, where("authId", "==", currentUserAuthId));
+  const userQuery = query(usersRef, where("authId", "==", currentUserAuthId));
 
-//     const querySnapshot = await getDocs(q);
+  onSnapshot(userQuery, (res) => {
+    setCurrentUser(
+      res.docs.map((docs) => {
+        return { ...docs.data(), id: docs.id } as UserType;
+      })[0]
+    );
+  });
+};
 
-//     if (querySnapshot.empty) {
-//       console.log("No matching documents.");
-//       return null;
-//     }
-
-//     const userDoc = querySnapshot.docs[0];
-//     return userDoc.data();
-//   }
-// };
-
-export const GetSingleUser = (
+export const GetSingleUser = async (
   setSingleUser: Function,
   userId: string | undefined
 ) => {
-  onSnapshot(usersRef, (res) => {
-    setSingleUser(
-      res.docs
-        .map((docs) => {
-          return { ...docs.data(), id: docs.id } as UserType;
-        })
-        .filter((item) => {
-          return item.id === userId;
-        })[0]
-    );
-  });
+  try {
+    const docRef = doc(usersRef, userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setSingleUser(docSnap.data());
+    } else {
+      console.log("No such document");
+      return null;
+    }
+  } catch (err) {
+    console.error("Error fetching single user:", err);
+  }
 };
 
 export const LikePost = (

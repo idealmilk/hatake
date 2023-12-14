@@ -4,15 +4,16 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import Loader from "@/components/common/Loader";
 import ProfileLayout from "@/layouts/ProfileLayout";
-import ProfileCard from "@/components/common/ProfileCard";
 import { auth } from "@/lib/firebase/config";
-import Posts from "@/components/Posts";
 import { useCurrentUser } from "@/context/UserContext";
+import ConnectionsComponent from "@/components/ConnectionsComponent";
 
-const Profile = () => {
+const Connections = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const { currentUser, setCurrentUser } = useCurrentUser();
+
+  console.log("userIdProfile: ", currentUser?.id);
 
   useEffect(() => {
     onAuthStateChanged(auth, () => {
@@ -29,11 +30,9 @@ const Profile = () => {
     <Loader />
   ) : (
     <ProfileLayout>
-      <ProfileCard />
-
-      <Posts userId={currentUser?.id} />
+      <ConnectionsComponent />
     </ProfileLayout>
   );
 };
 
-export default Profile;
+export default Connections;
