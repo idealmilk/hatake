@@ -172,3 +172,27 @@ export const CreateConnectionRequest = (
     console.log(err);
   }
 };
+
+export const GetSingleConnection = (
+  userId: string | undefined,
+  targetId: string | undefined,
+  setConnection: Function
+) => {
+  try {
+    const connectionQuery = query(
+      connectionsRef,
+      where("userId", "==", userId),
+      where("targetId", "==", targetId)
+    );
+
+    onSnapshot(connectionQuery, (res) => {
+      setConnection(
+        res.docs.map((docs) => {
+          return { ...docs.data(), id: docs.id } as UserType;
+        })[0]
+      );
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
