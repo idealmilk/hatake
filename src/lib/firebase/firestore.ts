@@ -15,10 +15,12 @@ import {
 import { auth, firestore } from "./config";
 import { toast } from "react-toastify";
 import { UserType } from "@/types/user";
+import { getCurrentTimeStamp } from "@/helpers/useMoment";
 
 let postsRef = collection(firestore, "posts");
 let usersRef = collection(firestore, "users");
 let likesRef = collection(firestore, "likes");
+let connectionsRef = collection(firestore, "connections");
 
 export const CreatePost = (data: any) => {
   addDoc(postsRef, data).then(() => {
@@ -71,7 +73,11 @@ export const UpdateUser = async (userId: string | undefined, payload: any) => {
 };
 
 export const GetAllUsers = (setAllUsers: Function) => {
-  onSnapshot(usersRef, (res) => {
+  let currentUserAuthId = auth.currentUser?.uid;
+
+  const usersQuery = query(usersRef, where("authId", "!=", currentUserAuthId));
+
+  onSnapshot(usersQuery, (res) => {
     setAllUsers(
       res.docs.map((docs) => {
         return { ...docs.data(), id: docs.id } as UserType;
@@ -148,4 +154,21 @@ export const GetLikesByUser = (
       setIsLiked(isLiked);
     });
   } catch (err) {}
+};
+
+export const CreateConnectionRequest = (
+  userId: string | undefined,
+  targetId: string | undefined
+) => {
+  try {
+    let connectionToCreate = doc(connectionsRef, `${userId}_${targetId}`);
+    setDoc(connectionToCreate, {
+      userId,
+      targetId,
+      status: "pending",
+      requestedTimeStamp: getCurrentTimeStamp(),
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
