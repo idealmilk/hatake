@@ -10,6 +10,7 @@ type FileUploadModalProps = {
   getImage: ChangeEventHandler<HTMLInputElement>;
   uploadDisplayPic: MouseEventHandler<HTMLElement>;
   currentImage: any;
+  currentFolder: string;
   uploadProgress: number;
 };
 
@@ -19,12 +20,13 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
   getImage,
   uploadDisplayPic,
   currentImage,
+  currentFolder,
   uploadProgress,
 }) => {
   console.log(setModalOpen);
   return (
     <Modal
-      title="Profile photo"
+      title={currentFolder === "displayPhoto" ? "Display photo" : "Cover photo"}
       centered
       open={modalOpen}
       onOk={() => setModalOpen(false)}

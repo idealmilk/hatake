@@ -11,6 +11,7 @@ const ProfileCard = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [fileUploadModalOpen, setFileUploadModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState({});
+  const [currentFolder, setCurrentFolder] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
 
   console.log(fileUploadModalOpen);
@@ -47,9 +48,10 @@ const ProfileCard = () => {
     }
   };
 
-  const uploadDisplayPic = () => {
+  const uploadPic = () => {
     UploadImage(
       currentImage,
+      currentFolder,
       currentUser?.id,
       setFileUploadModalOpen,
       setCurrentImage,
@@ -59,27 +61,53 @@ const ProfileCard = () => {
 
   return (
     <div className="relative w-auto mx-32 my-8  border-slate-300 border rounded-3xl">
-      <div className="w-full h-48 bg-orange rounded-t-2xl" />
+      <div
+        className={`w-full h-48 bg-orange rounded-t-2xl ${
+          currentUser?.coverPhoto ? "bg-cover bg-center" : "bg-green"
+        }`}
+        style={{
+          backgroundImage: currentUser?.coverPhoto
+            ? `url(${currentUser.coverPhoto})`
+            : "none",
+        }}
+        onClick={() => {
+          setCurrentFolder("coverPhoto");
+          setFileUploadModalOpen(true);
+        }}
+      />
+      <FileUploadModal
+        modalOpen={fileUploadModalOpen}
+        setModalOpen={setFileUploadModalOpen}
+        getImage={getImage}
+        uploadDisplayPic={uploadPic}
+        currentImage={currentImage}
+        currentFolder={currentFolder}
+        uploadProgress={uploadProgress}
+      />
 
       {/* Top details section */}
       <div className="-translate-y-24 ml-6">
         <div
           className={`w-48 h-48 border-2 border-white rounded-full cursor-pointer ${
-            currentUser?.displayPicURL ? "bg-cover bg-center" : "bg-green"
+            currentUser?.displayPhoto ? "bg-cover bg-center" : "bg-green"
           }`}
           style={{
-            backgroundImage: currentUser?.displayPicURL
-              ? `url(${currentUser.displayPicURL})`
+            backgroundImage: currentUser?.displayPhoto
+              ? `url(${currentUser.displayPhoto})`
               : "none",
           }}
-          onClick={() => setFileUploadModalOpen(true)}
-        ></div>
+          onClick={() => {
+            setCurrentFolder("displayPhoto");
+            setFileUploadModalOpen(true);
+          }}
+        />
         <FileUploadModal
           modalOpen={fileUploadModalOpen}
           setModalOpen={setFileUploadModalOpen}
           getImage={getImage}
-          uploadDisplayPic={uploadDisplayPic}
+          uploadDisplayPic={uploadPic}
           currentImage={currentImage}
+          currentFolder={currentFolder}
           uploadProgress={uploadProgress}
         />
 

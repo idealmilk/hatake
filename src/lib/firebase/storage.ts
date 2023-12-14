@@ -5,12 +5,13 @@ import { UpdateUser } from "./firestore";
 
 export const UploadImage = (
   file: any,
+  folder: string,
   userId: string | undefined,
   setModalOpen: Function,
   setCurrentImage: Function,
   setUploadProgress: Function
 ) => {
-  const displayPicsRef = ref(storage, `displayPics/${file.name}`);
+  const displayPicsRef = ref(storage, `${folder}/${file.name}`);
   const uploadTask = uploadBytesResumable(displayPicsRef, file);
 
   uploadTask.on(
@@ -26,7 +27,11 @@ export const UploadImage = (
     },
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then((res) => {
-        UpdateUser(userId, { displayPicURL: res });
+        if (folder === "displayPhoto") {
+          UpdateUser(userId, { displayPhoto: res });
+        } else if (folder === "coverPhoto") {
+          UpdateUser(userId, { coverPhoto: res });
+        }
         setModalOpen(false);
         setCurrentImage({});
         setUploadProgress(0);

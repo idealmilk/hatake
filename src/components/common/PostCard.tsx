@@ -24,11 +24,11 @@ export default function PostCard(post: PostType) {
       <div className="flex items-center">
         <div
           className={`h-12 w-12 rounded-full cursor-pointer ${
-            singleUser?.displayPicURL ? "bg-cover bg-center" : "bg-green"
+            singleUser?.displayPhoto ? "bg-cover bg-center" : "bg-green"
           }`}
           style={{
-            backgroundImage: singleUser?.displayPicURL
-              ? `url(${singleUser.displayPicURL})`
+            backgroundImage: singleUser?.displayPhoto
+              ? `url(${singleUser.displayPhoto})`
               : "none",
           }}
         />

@@ -26,11 +26,11 @@ export default function AvatarMenu() {
           <a className="menu-hover text-base font-medium text-black lg:mx-4">
             <div
               className={`w-10 h-10 rounded-full cursor-pointer ${
-                currentUser?.displayPicURL ? "bg-cover bg-center" : "bg-green"
+                currentUser?.displayPhoto ? "bg-cover bg-center" : "bg-green"
               }`}
               style={{
-                backgroundImage: currentUser?.displayPicURL
-                  ? `url(${currentUser.displayPicURL})`
+                backgroundImage: currentUser?.displayPhoto
+                  ? `url(${currentUser.displayPhoto})`
                   : "none",
               }}
             />
