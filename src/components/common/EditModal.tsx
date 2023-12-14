@@ -21,7 +21,7 @@ const EditModal: React.FC<EditModalProps> = ({
   updateProfileData,
 }) => {
   const { currentUser } = useCurrentUser();
-
+  console.log(setModalOpen);
   return (
     <Modal
       title="Edit Profile"

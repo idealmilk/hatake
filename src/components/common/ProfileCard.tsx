@@ -5,10 +5,15 @@ import { FaLocationDot } from "react-icons/fa6";
 import { IconContext } from "react-icons";
 import { useCurrentUser } from "@/context/UserContext";
 import { UploadImage } from "@/lib/firebase/storage";
+import FileUploadModal from "./FileUploadModal";
 
 const ProfileCard = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [fileUploadModalOpen, setFileUploadModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState({});
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  console.log(fileUploadModalOpen);
 
   const { currentUser, setCurrentUser } = useCurrentUser();
 
@@ -33,7 +38,7 @@ const ProfileCard = () => {
   const updateProfileData = async () => {
     UpdateUser(currentUser?.id, changes);
     GetCurrentUser(setCurrentUser);
-    setModalOpen(false);
+    setEditModalOpen(false);
   };
 
   const getImage = (event: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +48,13 @@ const ProfileCard = () => {
   };
 
   const uploadDisplayPic = () => {
-    UploadImage(currentImage, currentUser?.id);
+    UploadImage(
+      currentImage,
+      currentUser?.id,
+      setFileUploadModalOpen,
+      setCurrentImage,
+      setUploadProgress
+    );
   };
 
   return (
@@ -53,7 +64,7 @@ const ProfileCard = () => {
       {/* Top details section */}
       <div className="-translate-y-24 ml-6">
         <div
-          className={`w-48 h-48 border-2 border-white rounded-full ${
+          className={`w-48 h-48 border-2 border-white rounded-full cursor-pointer ${
             currentUser?.displayPicURL ? "bg-cover bg-center" : "bg-green"
           }`}
           style={{
@@ -61,10 +72,16 @@ const ProfileCard = () => {
               ? `url(${currentUser.displayPicURL})`
               : "none",
           }}
-        >
-          <input type="file" onChange={getImage} />
-          <button onClick={uploadDisplayPic}>Upload</button>
-        </div>
+          onClick={() => setFileUploadModalOpen(true)}
+        ></div>
+        <FileUploadModal
+          modalOpen={fileUploadModalOpen}
+          setModalOpen={setFileUploadModalOpen}
+          getImage={getImage}
+          uploadDisplayPic={uploadDisplayPic}
+          currentImage={currentImage}
+          uploadProgress={uploadProgress}
+        />
 
         <div className="flex justify-between p-6">
           <div className="">
@@ -89,13 +106,13 @@ const ProfileCard = () => {
           <div className="">
             <button
               className="text-orange font-semibold border-2 border-orange py-1 px-4 rounded-full"
-              onClick={() => setModalOpen(true)}
+              onClick={() => setEditModalOpen(true)}
             >
               Edit Profile
             </button>
             <EditModal
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
+              modalOpen={editModalOpen}
+              setModalOpen={setEditModalOpen}
               changes={changes}
               setChanges={setChanges}
               updateProfileData={updateProfileData}

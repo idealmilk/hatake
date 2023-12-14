@@ -10,8 +10,6 @@ type PostProps = {
 const Posts: React.FC<PostProps> = ({ userId }) => {
   const [allPosts, setAllPosts] = useState<any[]>([]);
 
-  console.log("Posts: ", userId);
-
   useMemo(() => {
     GetPosts(setAllPosts, userId);
   }, []);

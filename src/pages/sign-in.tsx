@@ -10,10 +10,11 @@ export default function SignIn() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      const idToken = await user?.getIdToken();
-      if (idToken) {
+    onAuthStateChanged(auth, () => {
+      const uid = auth.currentUser?.uid;
+      if (uid) {
         router.push("/");
+        setLoading(false);
       } else {
         setLoading(false);
       }

@@ -6,7 +6,6 @@ import Loader from "@/components/common/Loader";
 import ProfileLayout from "@/layouts/ProfileLayout";
 import ProfileCard from "@/components/common/ProfileCard";
 import { auth } from "@/lib/firebase/config";
-import { GetCurrentUser } from "@/lib/firebase/firestore";
 import Posts from "@/components/Posts";
 import { useCurrentUser } from "@/context/UserContext";
 
@@ -18,9 +17,9 @@ const Profile = () => {
   console.log("userIdProfile: ", currentUser?.id);
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      const idToken = await user?.getIdToken();
-      if (!idToken) {
+    onAuthStateChanged(auth, () => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) {
         router.push("/");
         setLoading(false);
       } else {
@@ -28,7 +27,7 @@ const Profile = () => {
       }
     });
   }, []);
-  return loading ? (
+  return loading || !currentUser ? (
     <Loader />
   ) : (
     <ProfileLayout>

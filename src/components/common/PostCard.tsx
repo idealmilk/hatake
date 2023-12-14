@@ -27,8 +27,8 @@ export default function PostCard(post: PostType) {
             singleUser?.displayPicURL ? "bg-cover bg-center" : "bg-green"
           }`}
           style={{
-            backgroundImage: currentUser?.displayPicURL
-              ? `url(${currentUser.displayPicURL})`
+            backgroundImage: singleUser?.displayPicURL
+              ? `url(${singleUser.displayPicURL})`
               : "none",
           }}
         />
