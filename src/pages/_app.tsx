@@ -5,13 +5,16 @@ import type { AppProps } from "next/app";
 import "flowbite";
 
 import { UserProvider } from "@/context/UserContext";
+import { NotificationsProvider } from "@/context/NotificationsContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
       <UserProvider>
-        <Component {...pageProps} />
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </UserProvider>
     </>
   );

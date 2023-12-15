@@ -15,6 +15,7 @@ import { auth, firestore } from "./config";
 import { toast } from "react-toastify";
 import { UserType } from "@/types/user";
 import { getCurrentTimeStamp } from "@/helpers/useMoment";
+import { NotificationType } from "@/types/notification";
 
 let postsRef = collection(firestore, "posts");
 let usersRef = collection(firestore, "users");
@@ -239,4 +240,24 @@ export const CreateNotification = (
   } catch (err) {
     console.log(err);
   }
+};
+
+export const GetNotificationsByUser = (
+  userId: string | undefined,
+  setNotifications: Function
+) => {
+  try {
+    const notificationsQuery = query(
+      notificationsRef,
+      where("userId", "==", userId)
+    );
+
+    onSnapshot(notificationsQuery, (res) => {
+      const notifications = res.docs.map((docs) => {
+        return { ...docs.data(), id: docs.id } as NotificationType;
+      });
+
+      setNotifications(notifications);
+    });
+  } catch (err) {}
 };

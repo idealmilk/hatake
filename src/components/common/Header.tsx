@@ -7,10 +7,16 @@ import { LuSearch } from "react-icons/lu";
 import { auth } from "@/lib/firebase/config";
 
 import AvatarMenu from "./AvatarMenu";
+import { useNotifications } from "@/context/NotificationsContext";
 
 export default function Header() {
   const router = useRouter();
   let user = auth.currentUser;
+  const { notifications, setNotifications } = useNotifications();
+
+  const newNotifications = notifications?.filter(
+    (notification) => !notification.seen
+  ).length;
 
   return (
     <header>
@@ -67,8 +73,14 @@ export default function Header() {
                   </div>
                 </IconContext.Provider>
                 <IconContext.Provider value={{ color: "black", size: "1.8em" }}>
-                  <div onClick={() => router.push("/sign-in")} className="mr-2">
+                  <div
+                    onClick={() => router.push("/sign-in")}
+                    className="relative mr-2"
+                  >
                     <GoBell />
+                    <span className="absolute -bottom-2 -right-2 h-4 w-4 rounded-full text-white text-xs bg-red-600 flex justify-center items-center items">
+                      <span>{newNotifications}</span>
+                    </span>
                   </div>
                 </IconContext.Provider>
 
