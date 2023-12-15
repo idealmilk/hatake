@@ -1,8 +1,12 @@
 import { useCurrentUser } from "@/context/UserContext";
-import { GetSingleConnection } from "@/lib/firebase/firestore";
+import {
+  GetSingleConnection,
+  UpdateConnection,
+} from "@/lib/firebase/firestore";
 import { ConnectionType } from "@/types/connection";
 import { UserType } from "@/types/user";
 import { useMemo, useState } from "react";
+import ConnectionResponse from "./ConnectionResponse";
 
 type ConnectionCardProps = {
   user: UserType;
@@ -19,6 +23,10 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
   useMemo(() => {
     GetSingleConnection(currentUser?.id, user.id, setConnection);
   }, []);
+
+  const handleConnectionResponse = (status: string) => {
+    UpdateConnection(connection?.id, { status: status });
+  };
 
   console.log(connection);
 
@@ -49,15 +57,24 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
             connection.status === "pending" &&
             connection.userId === currentUser?.id && <button>Requested</button>}
 
+          {connection && connection.status === "accepted" && (
+            <button>Message</button>
+          )}
+
           {connection &&
             connection.status === "pending" &&
-            connection.userId != currentUser?.id && <button>Respond</button>}
+            connection.userId != currentUser?.id && (
+              <ConnectionResponse
+                handleConnectionResponse={handleConnectionResponse}
+              />
+            )}
 
-          {!connection && (
-            <button onClick={() => handleConnectionRequest(user.id)}>
-              Connect
-            </button>
-          )}
+          {!connection ||
+            (connection.status === "ignored" && (
+              <button onClick={() => handleConnectionRequest(user.id)}>
+                Connect
+              </button>
+            ))}
         </div>
       </div>
     </div>

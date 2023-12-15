@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -166,19 +167,56 @@ export const CreateConnectionRequest = async (
       throw new Error("User ID and Target ID are required");
     }
 
-    const connectionId = `${userId}_${targetId}`;
-    let connectionToCreate = doc(connectionsRef, connectionId);
+    // Check for existing connection in both directions
+    const query1 = query(
+      connectionsRef,
+      where("userId", "==", userId),
+      where("targetId", "==", targetId)
+    );
+    const query2 = query(
+      connectionsRef,
+      where("userId", "==", targetId),
+      where("targetId", "==", userId)
+    );
 
-    await setDoc(connectionToCreate, {
-      userId,
-      targetId,
-      status: "pending",
-      requestedTimeStamp: getCurrentTimeStamp(),
-    });
+    const existingConnection = (await getDocs(query1)).docs.concat(
+      (await getDocs(query2)).docs
+    );
 
-    await CreateNotification(targetId, "connectionRequest", connectionId);
+    if (existingConnection.length === 0) {
+      // No existing connection, create a new one
+      const connectionId = `${userId}_${targetId}`;
+      let connectionToCreate = doc(connectionsRef, connectionId);
+
+      await setDoc(connectionToCreate, {
+        userId,
+        targetId,
+        status: "pending",
+        requestedTimeStamp: getCurrentTimeStamp(),
+      });
+
+      await CreateNotification(targetId, "connectionRequest", connectionId);
+    } else {
+      // Existing connection found, update its status to "pending"
+      const connectionId = existingConnection[0].id;
+      await UpdateConnection(connectionId, { status: "pending" });
+    }
   } catch (err) {
-    console.log(err);
+    console.error(err);
+  }
+};
+
+export const UpdateConnection = async (
+  connectionId: string | undefined,
+  payload: any
+) => {
+  try {
+    const connectionToEdit = doc(connectionsRef, connectionId);
+
+    await updateDoc(connectionToEdit, payload);
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
 };
 
