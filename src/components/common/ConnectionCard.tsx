@@ -45,9 +45,13 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
             </div>
           </div>
 
-          {connection && connection.status === "pending" && (
-            <button>Requested</button>
-          )}
+          {connection &&
+            connection.status === "pending" &&
+            connection.userId === currentUser?.id && <button>Requested</button>}
+
+          {connection &&
+            connection.status === "pending" &&
+            connection.userId != currentUser?.id && <button>Respond</button>}
 
           {!connection && (
             <button onClick={() => handleConnectionRequest(user.id)}>

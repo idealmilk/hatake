@@ -4,7 +4,6 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -21,6 +20,7 @@ let postsRef = collection(firestore, "posts");
 let usersRef = collection(firestore, "users");
 let likesRef = collection(firestore, "likes");
 let connectionsRef = collection(firestore, "connections");
+let notificationsRef = collection(firestore, "notifications");
 
 export const CreatePost = (data: any) => {
   addDoc(postsRef, data).then(() => {
@@ -156,18 +156,26 @@ export const GetLikesByUser = (
   } catch (err) {}
 };
 
-export const CreateConnectionRequest = (
+export const CreateConnectionRequest = async (
   userId: string | undefined,
   targetId: string | undefined
 ) => {
   try {
-    let connectionToCreate = doc(connectionsRef, `${userId}_${targetId}`);
-    setDoc(connectionToCreate, {
+    if (!userId || !targetId) {
+      throw new Error("User ID and Target ID are required");
+    }
+
+    const connectionId = `${userId}_${targetId}`;
+    let connectionToCreate = doc(connectionsRef, connectionId);
+
+    await setDoc(connectionToCreate, {
       userId,
       targetId,
       status: "pending",
       requestedTimeStamp: getCurrentTimeStamp(),
     });
+
+    await CreateNotification(targetId, "connectionRequest", connectionId);
   } catch (err) {
     console.log(err);
   }
@@ -179,18 +187,54 @@ export const GetSingleConnection = (
   setConnection: Function
 ) => {
   try {
-    const connectionQuery = query(
+    if (!userId || !targetId) {
+      throw new Error("User ID and Target ID are required");
+    }
+
+    const query1 = query(
       connectionsRef,
       where("userId", "==", userId),
       where("targetId", "==", targetId)
     );
 
-    onSnapshot(connectionQuery, (res) => {
-      setConnection(
-        res.docs.map((docs) => {
-          return { ...docs.data(), id: docs.id } as UserType;
-        })[0]
-      );
+    const query2 = query(
+      connectionsRef,
+      where("userId", "==", targetId),
+      where("targetId", "==", userId)
+    );
+
+    const processQueryResults = (res: any) => {
+      const connections = res.docs.map((doc: any) => {
+        return { ...doc.data(), id: doc.id } as UserType;
+      });
+      if (connections.length > 0) {
+        setConnection(connections[0]);
+      }
+    };
+
+    onSnapshot(query1, processQueryResults);
+    onSnapshot(query2, processQueryResults);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const CreateNotification = (
+  userId: string | undefined,
+  relatedDocType: string | undefined,
+  relatedDocId: string | undefined
+) => {
+  try {
+    let notificationToCreate = doc(
+      notificationsRef,
+      `${userId}_${relatedDocId}`
+    );
+    setDoc(notificationToCreate, {
+      userId,
+      relatedDocType,
+      relatedDocId,
+      seen: false,
+      timeStamp: getCurrentTimeStamp(),
     });
   } catch (err) {
     console.log(err);

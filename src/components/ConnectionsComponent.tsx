@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 
-import { CreateConnectionRequest, GetAllUsers } from "@/lib/firebase/firestore";
+import {
+  CreateConnectionRequest,
+  CreateNotification,
+  GetAllUsers,
+} from "@/lib/firebase/firestore";
 import { UserType } from "@/types/user";
 import { useCurrentUser } from "@/context/UserContext";
 import ConnectionCard from "./common/ConnectionCard";
