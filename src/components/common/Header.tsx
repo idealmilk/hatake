@@ -12,7 +12,7 @@ import { useNotifications } from "@/context/NotificationsContext";
 export default function Header() {
   const router = useRouter();
   let user = auth.currentUser;
-  const { notifications, setNotifications } = useNotifications();
+  const { notifications } = useNotifications();
 
   console.log(notifications);
 
@@ -76,8 +76,8 @@ export default function Header() {
                 </IconContext.Provider>
                 <IconContext.Provider value={{ color: "black", size: "1.8em" }}>
                   <div
-                    onClick={() => router.push("/sign-in")}
-                    className="relative mr-2"
+                    onClick={() => router.push("/notifications")}
+                    className="relative mr-2 cursor-pointer"
                   >
                     <GoBell />
                     {newNotifications && newNotifications > 0 && (
