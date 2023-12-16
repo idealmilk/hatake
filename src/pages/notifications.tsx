@@ -7,6 +7,7 @@ import HomeLayout from "@/layouts/HomeLayout";
 import { auth } from "@/lib/firebase/config";
 import { useCurrentUser } from "@/context/UserContext";
 import NotificationsComponent from "@/components/NotificationsComponent";
+import { MarkNotificationsAsSeen } from "@/lib/firebase/firestore/Notifications";
 
 const Notifications = () => {
   const router = useRouter();
@@ -24,6 +25,12 @@ const Notifications = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      MarkNotificationsAsSeen(currentUser?.id);
+    }
+  }, [currentUser]);
 
   return loading || !currentUser ? (
     <Loader />

@@ -8,6 +8,7 @@ import ProfileCard from "@/components/common/ProfileCard";
 import { auth } from "@/lib/firebase/config";
 import Posts from "@/components/Posts";
 import { useCurrentUser } from "@/context/UserContext";
+import { MarkNotificationsAsSeen } from "@/lib/firebase/firestore/Notifications";
 
 const Profile = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const Profile = () => {
       }
     });
   }, []);
+
   return loading || !currentUser ? (
     <Loader />
   ) : (

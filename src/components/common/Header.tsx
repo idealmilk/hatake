@@ -80,8 +80,8 @@ export default function Header() {
                     className="relative mr-2 cursor-pointer"
                   >
                     <GoBell />
-                    {newNotifications && newNotifications > 0 && (
-                      <span className="absolute -bottom-2 -right-2 h-4 w-4 rounded-full text-white text-xs bg-red-600 flex justify-center items-center items">
+                    {newNotifications > 0 && (
+                      <span className="absolute -bottom-2 -right-2 h-4 w-4 rounded-full text-white text-xs bg-red-600 flex justify-center items-center">
                         <span>{newNotifications}</span>
                       </span>
                     )}

@@ -5,6 +5,8 @@ import {
   where,
   onSnapshot,
   collection,
+  getDocs,
+  writeBatch,
 } from "firebase/firestore";
 
 import { getCurrentTimeStamp } from "@/helpers/useMoment";
@@ -54,4 +56,29 @@ export const GetNotificationsByUser = (
       setNotifications(notifications);
     });
   } catch (err) {}
+};
+
+export const MarkNotificationsAsSeen = async (userId: string) => {
+  const batch = writeBatch(firestore);
+
+  console.log("batch: ", batch);
+
+  try {
+    const notificationsQuery = query(
+      notificationsRef,
+      where("userId", "==", userId)
+    );
+
+    const querySnapshot = await getDocs(notificationsQuery);
+
+    querySnapshot.forEach((doc) => {
+      const notificationDocRef = doc.ref;
+      batch.update(notificationDocRef, { seen: true });
+    });
+
+    await batch.commit();
+  } catch (err) {
+    console.error("Error updating notifications:", err);
+    // Handle the error appropriately
+  }
 };
