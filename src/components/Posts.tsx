@@ -4,7 +4,7 @@ import PostCard from "@/components/common/PostCard";
 import { GetAllPosts } from "@/lib/firebase/firestore/Posts";
 
 type PostProps = {
-  userId: string | undefined;
+  userId?: string | undefined;
 };
 
 const Posts: React.FC<PostProps> = ({ userId }) => {
