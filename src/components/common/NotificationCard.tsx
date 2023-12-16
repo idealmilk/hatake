@@ -7,7 +7,12 @@ type NotificationCardProps = {
 const NotificationCard: React.FC<NotificationCardProps> = ({
   notification,
 }) => {
-  return <div>{notification.relatedDocType}</div>;
+  return (
+    <div>
+      <p>{notification.relatedDocType}</p>
+      <p>{notification.seen.toString()}</p>
+    </div>
+  );
 };
 
 export default NotificationCard;

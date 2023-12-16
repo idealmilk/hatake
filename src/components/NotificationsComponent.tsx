@@ -9,16 +9,20 @@ import { useNotifications } from "@/context/NotificationsContext";
 import { NotificationType } from "@/types/notification";
 import NotificationCard from "./common/NotificationCard";
 
-export default function NotificationsComponent() {
-  const { currentUser } = useCurrentUser();
+type NotificationsComponentProps = {
+  notifications: NotificationType[] | null;
+};
 
-  const { notifications, setNotifications } = useNotifications();
-
+const NotificationsComponents: React.FC<NotificationsComponentProps> = ({
+  notifications,
+}) => {
   return (
     <div>
-      {notifications.map((notification: NotificationType, index) => {
+      {notifications?.map((notification: NotificationType, index) => {
         return <NotificationCard key={index} notification={notification} />;
       })}
     </div>
   );
-}
+};
+
+export default NotificationsComponents;
