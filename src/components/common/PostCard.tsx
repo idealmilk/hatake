@@ -10,7 +10,7 @@ export default function PostCard(post: PostType) {
   const [singleUser, setSingleUser] = useState<UserType | null>(null);
 
   useMemo(() => {
-    GetUserById(setSingleUser, post.userId);
+    GetUserById(post.userId, setSingleUser);
   }, []);
 
   const { currentUser } = useCurrentUser();

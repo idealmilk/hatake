@@ -42,8 +42,8 @@ export const GetCurrentUser = (setCurrentUser: Function) => {
 };
 
 export const GetUserById = async (
-  setSingleUser: Function,
-  userId: string | undefined
+  userId: string | undefined,
+  setSingleUser: Function
 ) => {
   try {
     const docRef = doc(usersRef, userId);

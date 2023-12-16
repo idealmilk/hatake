@@ -69,12 +69,11 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
               />
             )}
 
-          {!connection ||
-            (connection.status === "ignored" && (
-              <button onClick={() => handleConnectionRequest(user.id)}>
-                Connect
-              </button>
-            ))}
+          {(!connection || connection.status === "ignored") && (
+            <button onClick={() => handleConnectionRequest(user.id)}>
+              Connect
+            </button>
+          )}
         </div>
       </div>
     </div>

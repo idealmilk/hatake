@@ -9,6 +9,7 @@ import {
   setDoc,
   updateDoc,
   onSnapshot,
+  getDoc,
 } from "firebase/firestore";
 import { firestore } from "../config";
 import { CreateNotification } from "./Notifications";
@@ -98,6 +99,26 @@ export const GetConnection = (
     onSnapshot(query2, processQueryResults);
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const GetConnectionById = async (
+  connectionId: string | undefined,
+  setConnection: Function
+) => {
+  try {
+    console.log(connectionsRef, connectionId);
+    const docRef = doc(connectionsRef, connectionId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setConnection(docSnap.data());
+    } else {
+      console.log("No such document");
+      return null;
+    }
+  } catch (err) {
+    console.error("Error fetching connection:", err);
   }
 };
 

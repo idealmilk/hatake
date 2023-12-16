@@ -7,6 +7,7 @@ import {
   collection,
   getDocs,
   writeBatch,
+  orderBy,
 } from "firebase/firestore";
 
 import { getCurrentTimeStamp } from "@/helpers/useMoment";
@@ -45,7 +46,8 @@ export const GetNotificationsByUser = (
   try {
     const notificationsQuery = query(
       notificationsRef,
-      where("userId", "==", userId)
+      where("userId", "==", userId),
+      orderBy("timeStamp", "desc")
     );
 
     onSnapshot(notificationsQuery, (res) => {
@@ -60,8 +62,6 @@ export const GetNotificationsByUser = (
 
 export const MarkNotificationsAsSeen = async (userId: string) => {
   const batch = writeBatch(firestore);
-
-  console.log("batch: ", batch);
 
   try {
     const notificationsQuery = query(

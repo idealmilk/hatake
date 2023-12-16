@@ -8,47 +8,38 @@ import { auth } from "@/lib/firebase/config";
 import { useCurrentUser } from "@/context/UserContext";
 import NotificationsComponent from "@/components/NotificationsComponent";
 import { MarkNotificationsAsSeen } from "@/lib/firebase/firestore/Notifications";
-import { useNotifications } from "@/context/NotificationsContext";
-import { NotificationType } from "@/types/notification";
 
 const Notifications = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const { currentUser, setCurrentUser } = useCurrentUser();
-  const { notifications, setNotifications } = useNotifications();
-
-  const originalNotificationsRef = useRef<NotificationType[] | null>(null);
+  const { currentUser } = useCurrentUser();
 
   useEffect(() => {
-    onAuthStateChanged(auth, () => {
-      const uid = auth.currentUser?.uid;
-      if (!uid) {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setLoading(!user);
+      if (!user) {
         router.push("/");
-        setLoading(false);
-      } else {
-        setLoading(false);
       }
     });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    if (currentUser && notifications) {
-      console.log(notifications);
-      originalNotificationsRef.current = notifications;
-      MarkNotificationsAsSeen(currentUser?.id);
+    // Check if notifications are loaded and set the ref
+    if (currentUser) {
+      MarkNotificationsAsSeen(currentUser.id);
     }
-  }, [currentUser, notifications]);
+  }, [currentUser]);
 
-  const originalNotifications = originalNotificationsRef.current;
+  if (loading) {
+    return <Loader />;
+  }
 
-  console.log(originalNotifications);
-
-  return loading || !currentUser ? (
-    <Loader />
-  ) : (
+  return (
     <HomeLayout>
       <h1>Notifications</h1>
-      <NotificationsComponent notifications={originalNotifications} />
+      <NotificationsComponent />
     </HomeLayout>
   );
 };
