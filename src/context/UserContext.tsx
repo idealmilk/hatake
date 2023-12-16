@@ -8,7 +8,7 @@ import React, {
 import { UserType } from "@/types/user";
 import { auth } from "@/lib/firebase/config"; // Import your Firebase auth configuration
 import { onAuthStateChanged } from "firebase/auth";
-import { GetCurrentUser } from "@/lib/firebase/firestore";
+import { GetCurrentUser } from "@/lib/firebase/firestore/Users";
 
 interface UserContextType {
   currentUser: UserType | null;

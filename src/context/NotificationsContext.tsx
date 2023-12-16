@@ -9,7 +9,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "@/lib/firebase/config"; // Import your Firebase auth configuration
 import { NotificationType } from "@/types/notification";
-import { GetNotificationsByUser } from "@/lib/firebase/firestore";
+import { GetNotificationsByUser } from "@/lib/firebase/firestore/Notifications";
 import { useCurrentUser } from "./UserContext";
 
 interface NotificationsContextType {

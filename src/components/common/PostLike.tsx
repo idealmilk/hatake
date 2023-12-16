@@ -1,5 +1,5 @@
 import { useCurrentUser } from "@/context/UserContext";
-import { GetLikesByUser, LikePost } from "@/lib/firebase/firestore";
+import { GetLikesByUser, LikePost } from "@/lib/firebase/firestore/Likes";
 import { useMemo, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 import PostCard from "@/components/common/PostCard";
-import { GetPosts } from "@/lib/firebase/firestore";
+import { GetAllPosts } from "@/lib/firebase/firestore/Posts";
 
 type PostProps = {
   userId: string | undefined;
@@ -11,7 +11,7 @@ const Posts: React.FC<PostProps> = ({ userId }) => {
   const [allPosts, setAllPosts] = useState<any[]>([]);
 
   useMemo(() => {
-    GetPosts(setAllPosts, userId);
+    GetAllPosts(setAllPosts, userId);
   }, []);
 
   return (

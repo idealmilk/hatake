@@ -1,13 +1,10 @@
 import { useMemo, useState } from "react";
 
-import {
-  CreateConnectionRequest,
-  CreateNotification,
-  GetAllUsers,
-} from "@/lib/firebase/firestore";
 import { UserType } from "@/types/user";
 import { useCurrentUser } from "@/context/UserContext";
 import ConnectionCard from "./common/ConnectionCard";
+import { CreateConnection } from "@/lib/firebase/firestore/Connections";
+import { GetAllUsers } from "@/lib/firebase/firestore/Users";
 
 export default function ConnectionsComponent() {
   const { currentUser, setCurrentUser } = useCurrentUser();
@@ -18,7 +15,7 @@ export default function ConnectionsComponent() {
   }, []);
 
   const handleConnectionRequest = (targetId: string) => {
-    CreateConnectionRequest(currentUser?.id, targetId);
+    CreateConnection(currentUser?.id, targetId);
   };
 
   return (

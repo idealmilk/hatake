@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 import { storage } from "./config";
-import { UpdateUser } from "./firestore";
+import { UpdateUser } from "./firestore/Users";
 
 export const UploadImage = (
   file: any,

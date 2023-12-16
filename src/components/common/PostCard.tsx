@@ -1,5 +1,5 @@
 import { formatTimeStamp } from "@/helpers/useMoment";
-import { GetSingleUser } from "@/lib/firebase/firestore";
+import { GetUserById } from "@/lib/firebase/firestore/Users";
 import { PostType } from "@/types/post";
 import { UserType } from "@/types/user";
 import { useMemo, useState } from "react";
@@ -10,7 +10,7 @@ export default function PostCard(post: PostType) {
   const [singleUser, setSingleUser] = useState<UserType | null>(null);
 
   useMemo(() => {
-    GetSingleUser(setSingleUser, post.userId);
+    GetUserById(setSingleUser, post.userId);
   }, []);
 
   const { currentUser } = useCurrentUser();

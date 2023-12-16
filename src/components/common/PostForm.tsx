@@ -1,9 +1,9 @@
 import { useState } from "react";
 import PostModal from "./PostModal";
-import { CreatePost } from "@/lib/firebase/firestore";
 
 import { getCurrentTimeStamp } from "@/helpers/useMoment";
 import { useCurrentUser } from "@/context/UserContext";
+import { CreatePost } from "@/lib/firebase/firestore/Posts";
 
 const PostForm = () => {
   const [modalOpen, setModalOpen] = useState(false);

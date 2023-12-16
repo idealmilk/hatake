@@ -1,11 +1,13 @@
+import { useMemo, useState } from "react";
+
 import { useCurrentUser } from "@/context/UserContext";
-import {
-  GetSingleConnection,
-  UpdateConnection,
-} from "@/lib/firebase/firestore";
 import { ConnectionType } from "@/types/connection";
 import { UserType } from "@/types/user";
-import { useMemo, useState } from "react";
+import {
+  GetConnection,
+  UpdateConnection,
+} from "@/lib/firebase/firestore/Connections";
+
 import ConnectionResponse from "./ConnectionResponse";
 
 type ConnectionCardProps = {
@@ -21,7 +23,7 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
   const { currentUser, setCurrentUser } = useCurrentUser();
 
   useMemo(() => {
-    GetSingleConnection(currentUser?.id, user.id, setConnection);
+    GetConnection(currentUser?.id, user.id, setConnection);
   }, []);
 
   const handleConnectionResponse = (status: string) => {

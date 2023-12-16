@@ -1,11 +1,11 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import EditModal from "./EditModal";
-import { GetCurrentUser, UpdateUser } from "@/lib/firebase/firestore";
 import { FaLocationDot } from "react-icons/fa6";
 import { IconContext } from "react-icons";
 import { useCurrentUser } from "@/context/UserContext";
 import { UploadImage } from "@/lib/firebase/storage";
 import FileUploadModal from "./FileUploadModal";
+import { GetCurrentUser, UpdateUser } from "@/lib/firebase/firestore/Users";
 
 const ProfileCard = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
