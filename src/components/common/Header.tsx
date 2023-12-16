@@ -14,6 +14,8 @@ export default function Header() {
   let user = auth.currentUser;
   const { notifications, setNotifications } = useNotifications();
 
+  console.log(notifications);
+
   const newNotifications = notifications?.filter(
     (notification) => !notification.seen
   ).length;
@@ -78,9 +80,11 @@ export default function Header() {
                     className="relative mr-2"
                   >
                     <GoBell />
-                    <span className="absolute -bottom-2 -right-2 h-4 w-4 rounded-full text-white text-xs bg-red-600 flex justify-center items-center items">
-                      <span>{newNotifications}</span>
-                    </span>
+                    {newNotifications && newNotifications > 0 && (
+                      <span className="absolute -bottom-2 -right-2 h-4 w-4 rounded-full text-white text-xs bg-red-600 flex justify-center items-center items">
+                        <span>{newNotifications}</span>
+                      </span>
+                    )}
                   </div>
                 </IconContext.Provider>
 

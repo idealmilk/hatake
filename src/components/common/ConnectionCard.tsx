@@ -30,8 +30,6 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
     UpdateConnection(connection?.id, { status: status });
   };
 
-  console.log(connection);
-
   return (
     <div>
       <div className="flex flex-col border-b py-2 mx-2 h-28 justify-center">

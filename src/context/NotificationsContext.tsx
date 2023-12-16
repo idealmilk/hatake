@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  SetStateAction,
 } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -13,10 +14,8 @@ import { GetNotificationsByUser } from "@/lib/firebase/firestore/Notifications";
 import { useCurrentUser } from "./UserContext";
 
 interface NotificationsContextType {
-  notifications: NotificationType[] | null;
-  setNotifications: React.Dispatch<
-    React.SetStateAction<NotificationType[] | null>
-  >;
+  notifications: NotificationType[] | [];
+  setNotifications: React.Dispatch<SetStateAction<NotificationType[]>>;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | null>(
@@ -30,9 +29,7 @@ interface NotificationsProviderProps {
 export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
   children,
 }) => {
-  const [notifications, setNotifications] = useState<NotificationType[] | null>(
-    null
-  );
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
   const { currentUser, setCurrentUser } = useCurrentUser();
 
@@ -41,12 +38,12 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
       if (user) {
         GetNotificationsByUser(currentUser?.id, setNotifications);
       } else {
-        setNotifications(null);
+        setNotifications([]);
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [currentUser]);
 
   return (
     <NotificationsContext.Provider value={{ notifications, setNotifications }}>
